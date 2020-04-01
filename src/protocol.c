@@ -36,7 +36,7 @@
 
 enum {
     BTC_ADDR_TIME_VERSION = 31402,
-    BTC_MIN_PROTO_VERSION = 70000,
+    BTC_MIN_PROTO_VERSION = 70813,
 };
 
 /* IPv4 addresses are mapped to 16bytes with a prefix of 10 x 0x00 + 2 x 0xff */

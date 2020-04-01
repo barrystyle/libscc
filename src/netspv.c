@@ -191,7 +191,7 @@ void btc_net_spv_periodic_statecheck(btc_node *node, uint64_t *now)
     /* check if we need to sync headers from a different peer */
     if ((client->stateflags & SPV_HEADER_SYNC_FLAG) == SPV_HEADER_SYNC_FLAG)
     {
-        btc_net_spv_request_headers(client);
+    //    btc_net_spv_request_headers(client);
     }
     else
     {
@@ -219,37 +219,6 @@ static btc_bool btc_net_spv_node_timer_callback(btc_node *node, uint64_t *now)
 void btc_net_spv_fill_block_locator(btc_spv_client *client, vector *blocklocators)
 {
     if (client->headers_db->getchaintip(client->headers_db_ctx)->height == 0)
-    {
-        if (client->use_checkpoints && client->oldest_item_of_interest > BLOCK_GAP_TO_DEDUCT_TO_START_SCAN_FROM * BLOCKS_DELTA_IN_S) {
-            /* jump to checkpoint */
-            /* check oldest item of interest and set genesis/checkpoint */
-
-            int64_t min_timestamp = client->oldest_item_of_interest - BLOCK_GAP_TO_DEDUCT_TO_START_SCAN_FROM * BLOCKS_DELTA_IN_S; /* ensure we going back ~144 blocks */
-            for (int i = (sizeof(btc_mainnet_checkpoint_array) / sizeof(btc_mainnet_checkpoint_array[0]))-1; i >= 0 ; i--)
-            {
-                const btc_checkpoint *cp = &btc_mainnet_checkpoint_array[i];
-                if ( btc_mainnet_checkpoint_array[i].timestamp < min_timestamp)
-                {
-                    uint256 *hash = btc_calloc(1, sizeof(uint256));
-                    utils_uint256_sethex((char *)btc_mainnet_checkpoint_array[i].hash, (uint8_t *)hash);
-                    vector_add(blocklocators, (void *)hash);
-
-                    if (!client->headers_db->has_checkpoint_start(client->headers_db_ctx)) {
-                        client->headers_db->set_checkpoint_start(client->headers_db_ctx, *hash, btc_mainnet_checkpoint_array[i].height);
-                    }
-                }
-            }
-            if (blocklocators->len > 0) {
-                // return if we could fill up the blocklocator with checkpoints
-                return;
-            }
-        }
-        uint256 *hash = btc_calloc(1, sizeof(uint256));
-        memcpy(hash, &client->chainparams->genesisblockhash, sizeof(uint256));
-        vector_add(blocklocators, (void *)hash);
-        client->nodegroup->log_write_cb("Setting blocklocator with genesis block\n");
-    }
-    else
     {
         client->headers_db->fill_blocklocator_tip(client->headers_db_ctx, blocklocators);
     }

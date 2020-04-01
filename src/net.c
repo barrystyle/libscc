@@ -289,7 +289,7 @@ btc_node_group* btc_node_group_new(const btc_chainparams* chainparams)
     node_group->nodes = vector_new(1, btc_node_free_cb);
     node_group->chainparams = (chainparams ? chainparams : &btc_chainparams_main);
     node_group->parse_cmd_cb = NULL;
-    strcpy(node_group->clientstr, "libbtc 0.1");
+    strcpy(node_group->clientstr, "stakecube2.0");
 
     /* nullify callbacks */
     node_group->postcmd_cb = NULL;
@@ -493,8 +493,8 @@ int btc_node_parse_message(btc_node* node, btc_p2p_msg_hdr* hdr, struct const_bu
             node->version_handshake = true;
 
             /* execute callback and inform that the node is ready for custom message logic */
-            if (node->nodegroup->handshake_done_cb)
-                node->nodegroup->handshake_done_cb(node);
+//            if (node->nodegroup->handshake_done_cb)
+//                node->nodegroup->handshake_done_cb(node);
         } else if (strcmp(hdr->command, BTC_MSG_PING) == 0) {
             /* response pings */
             uint64_t nonce = 0;

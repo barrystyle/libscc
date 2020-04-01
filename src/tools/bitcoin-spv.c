@@ -93,15 +93,8 @@ btc_bool spv_header_message_processed(struct btc_spv_client_ *client, btc_node *
     return true;
 }
 
-static btc_bool quit_when_synced = true;
+static btc_bool quit_when_synced = false;
 void spv_sync_completed(btc_spv_client* client) {
-    printf("Sync completed, at height %d\n", client->headers_db->getchaintip(client->headers_db_ctx)->height);
-    if (quit_when_synced) {
-        btc_node_group_shutdown(client->nodegroup);
-    }
-    else {
-        printf("Waiting for new blocks or relevant transactions...\n");
-    }
 }
 
 int main(int argc, char* argv[])
@@ -111,9 +104,9 @@ int main(int argc, char* argv[])
     int opt = 0;
     char* data = 0;
     char* ips = 0;
-    btc_bool debug = false;
+    btc_bool debug = true;
     int timeout = 15;
-    int maxnodes = 10;
+    int maxnodes = 1024;
     char* dbfile = 0;
     const btc_chainparams* chain = &btc_chainparams_main;
 
